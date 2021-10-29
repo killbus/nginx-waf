@@ -1,0 +1,32 @@
+---
+version: "2"
+
+services:
+  nginx_waf:
+    container_name: nginx_waf
+    build:
+      context: .
+      args:
+        - MAXMIND_LICENSE_KEY=xxx
+        - NGX_VER=1.20.2
+        # - CHANGE_SOURCE=true
+    ports:
+      - "127.0.0.1:80:8080"
+    volumes:
+      - conf:/etc/nginx/conf.d:ro
+      - assets:/usr/local/src/ngx_waf/assets:ro
+    restart: always
+
+volumes:
+  conf:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./conf.d
+  assets:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./assets
